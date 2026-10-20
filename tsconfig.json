@@ -2,8 +2,8 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    // "rootDir": "./src",                  // ရေးသားမည့် .ts ဖိုင်များရှိမည့် ပင်မဖိုဒါကို သတ်မှတ်ရန်
-    // "outDir": "./dist",                  // compile ပြီးထွက်လာမည့် .js ဖိုင်များသိမ်းမည့်ဖိုဒါကို သတ်မှတ်ရန်
+    "rootDir": "./",                  // ရေးသားမည့် .ts ဖိုင်များရှိမည့် ပင်မဖိုဒါကို သတ်မှတ်ရန်
+    "outDir": "./dist",                  // compile ပြီးထွက်လာမည့် .js ဖိုင်များသိမ်းမည့်ဖိုဒါကို သတ်မှတ်ရန်
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
