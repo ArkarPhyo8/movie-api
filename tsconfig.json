@@ -1,0 +1,48 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    // "rootDir": "./src",                  // ရေးသားမည့် .ts ဖိုင်များရှိမည့် ပင်မဖိုဒါကို သတ်မှတ်ရန်
+    // "outDir": "./dist",                  // compile ပြီးထွက်လာမည့် .js ဖိုင်များသိမ်းမည့်ဖိုဒါကို သတ်မှတ်ရန်
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    // "module": "nodenext", // Node.js ၏ မူလ ES Modules စနစ်ဖြင့် module များကို ကိုင်တွယ်ရန်
+    "module": "ESNext", // nodenext အစား esnext ကိုသုံးပါ
+    "moduleResolution": "bundler", // nodenext အစား bundler သို့ ပြောင်းပါ
+    "target": "ES2023", // အသစ်ဆုံး JavaScript ဗားရှင်း (ESNext) သို့ ပြောင်းလဲရန်
+    "types": [], // Global types များကို ပယ်ဖျောက်ထားပြီး လိုအပ်မှ သီးသန့်သွင်းရန်
+    // For nodejs:
+    // "lib": ["esnext"],                    // အသုံးပြုမည့် standard library များကို သတ်မှတ်ရန်
+    // "types": ["node"],                    // Node.js types များကို ယူသုံးရန် (@types/node လိုအပ်သည်)
+    // and npm install -D @types/node
+
+    // Other Outputs
+    "sourceMap": true, // Debug လုပ်ရန် .js.map ဖိုင်များကို ထုတ်ပေးရန်
+    "declaration": true, // TypeScript type definitions များအတွက် .d.ts ဖိုင်များထုတ်ပေးရန်
+    "declarationMap": true, // .d.ts ဖိုင်မှ မူလ .ts ဖိုင်သို့ ခုန်ကူးစစ်ဆေးနိုင်ရန် map ထုတ်ပေးရန်
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true, // Array/Object များကို index ဖြင့်ခေါ်ရာတွင် undefined ဖြစ်နိုင်ချေရှိမရှိ တင်းကြပ်စွာစစ်ဆေးရန်
+    "exactOptionalPropertyTypes": false, // Optional property မပါခြင်းနှင့် undefined ဖြစ်ခြင်းကို သီးသန့်ခွဲခြားစစ်ဆေးရန်
+
+    // Style Options
+    // "noImplicitReturns": true,            // function တွင် return မပါလျှင် သတိပေးရန်
+    // "noImplicitOverride": true,           // class တွင် override လုပ်သည့်အခါ keyword ထည့်ရန်
+    // "noUnusedLocals": true,               // မသုံးဘဲကျန်နေသော local variables များကို သတိပေးရန်
+    // "noUnusedParameters": true,           // မသုံးဘဲကျန်နေသော function parameters များကို သတိပေးရန်
+    // "noFallthroughCasesInSwitch": true,   // switch case တွင် break မပါလျှင် သတိပေးရန်
+    // "noPropertyAccessFromIndexSignature": true, // index signature ဖြင့် property ခေါ်ရာတွင် dot သုံးခွင့်မပြုရန်
+
+    // Recommended Options
+    "strict": true, // TypeScript ၏ တင်းကြပ်သော type စစ်ဆေးမှုများအားလုံးကို ဖွင့်ရန်
+    "esModuleInterop": true, // CommonJS module များကို ES module အဖြစ် import လုပ်နိုင်ရန်
+    "ignoreDeprecations": "6.0", // TypeScript 6.0 မှာ deprecated ဖြစ်သည့် feature များကို သတိပေးခြင်းကို ပယ်ဖျောက်ရန်
+    "jsx": "react-jsx", // React 17+ ၏ JSX transform ပုံစံကို အသုံးပြုရန်
+    "verbatimModuleSyntax": true, // import/export တွင် type နှင့် value ကို တင်းကြပ်စွာ ခွဲခြားရေးသားရန်
+    "isolatedModules": true, // ဖိုင်တစ်ခုချင်းစီကို သီးသန့် transpile လုပ်နိုင်ရန် စစ်ဆေးရန်
+    "noUncheckedSideEffectImports": true, // ဘေးထွက်သက်ရောက်မှုအတွက် import လုပ်သောဖိုင်များ တကယ်ရှိမရှိစစ်ဆေးရန်
+    "moduleDetection": "force", // ဖိုင်အားလုံးကို module ပုံစံဖြစ်ရန် အတင်းအကျပ် သတ်မှတ်ရန်
+    "skipLibCheck": true // node_modules ထဲရှိ third-party type ဖိုင်များကို လိုက်မစစ်တော့ဘဲ ကျော်ရန် (speed မြန်စေရန်)
+  }
+}
