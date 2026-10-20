@@ -2,8 +2,8 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    "rootDir": "./",                  // ရေးသားမည့် .ts ဖိုင်များရှိမည့် ပင်မဖိုဒါကို သတ်မှတ်ရန်
-    "outDir": "./dist",                  // compile ပြီးထွက်လာမည့် .js ဖိုင်များသိမ်းမည့်ဖိုဒါကို သတ်မှတ်ရန်
+    "rootDir": "./src", // ရေးသားမည့် .ts ဖိုင်များရှိမည့် ပင်မဖိုဒါကို သတ်မှတ်ရန်
+    "outDir": "./dist", // compile ပြီးထွက်လာမည့် .js ဖိုင်များသိမ်းမည့်ဖိုဒါကို သတ်မှတ်ရန်
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
@@ -11,7 +11,7 @@
     "module": "ESNext", // nodenext အစား esnext ကိုသုံးပါ
     "moduleResolution": "bundler", // nodenext အစား bundler သို့ ပြောင်းပါ
     "target": "ES2023", // အသစ်ဆုံး JavaScript ဗားရှင်း (ESNext) သို့ ပြောင်းလဲရန်
-    "types": [], // Global types များကို ပယ်ဖျောက်ထားပြီး လိုအပ်မှ သီးသန့်သွင်းရန်
+    "types": ["node"], // Global types များကို ပယ်ဖျောက်ထားပြီး လိုအပ်မှ သီးသန့်သွင်းရန်
     // For nodejs:
     // "lib": ["esnext"],                    // အသုံးပြုမည့် standard library များကို သတ်မှတ်ရန်
     // "types": ["node"],                    // Node.js types များကို ယူသုံးရန် (@types/node လိုအပ်သည်)
@@ -44,5 +44,7 @@
     "noUncheckedSideEffectImports": true, // ဘေးထွက်သက်ရောက်မှုအတွက် import လုပ်သောဖိုင်များ တကယ်ရှိမရှိစစ်ဆေးရန်
     "moduleDetection": "force", // ဖိုင်အားလုံးကို module ပုံစံဖြစ်ရန် အတင်းအကျပ် သတ်မှတ်ရန်
     "skipLibCheck": true // node_modules ထဲရှိ third-party type ဖိုင်များကို လိုက်မစစ်တော့ဘဲ ကျော်ရန် (speed မြန်စေရန်)
-  }
+  },
+  "include": ["src/**/*"], // src ထဲက ဖိုင်တွေကိုပဲ Compile လုပ်မယ်
+  "exclude": ["node_modules", "dist"]
 }
