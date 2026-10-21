@@ -16,18 +16,27 @@ app.use(cors());
 config();
 
 import { connectToDatabase, disconnectFromDatabase } from "./config/db";
+import { authMiddleware } from "./middleware/authMiddleware";
+import { notFoundHandler } from "./middleware/notFound.middleware";
+import { globalErrorHandler } from "./middleware/error.middleware";
 
 connectToDatabase();
-
 
 //Body Parser Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //API Routes
-app.use("/movies", movieRoutes);
 app.use("/auth", authRoutes);
+app.use(authMiddleware);
+app.use("/movies", movieRoutes);
 app.use("/watch-list", watchListRoutes);
+
+//Not Found Middleware
+app.use(notFoundHandler);
+
+//Global Error Handler
+app.use(globalErrorHandler);
 
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

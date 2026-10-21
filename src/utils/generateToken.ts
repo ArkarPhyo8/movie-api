@@ -1,5 +1,6 @@
 import type { Response } from "express";
 import jwt, { type SignOptions } from "jsonwebtoken";
+import { AppError } from "../errors/AppError";
 
 export const generateToken = (userId: string, res: Response) => {
   const payload = { id: userId };
@@ -7,7 +8,7 @@ export const generateToken = (userId: string, res: Response) => {
   const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "1d";
 
   if (!jwtSecret) {
-    throw new Error("JWT_SECRET is not defined in environment variables.");
+    throw new AppError("JWT_SECRET is not defined in environment variables.",500);
   }
 
   const options: SignOptions = {

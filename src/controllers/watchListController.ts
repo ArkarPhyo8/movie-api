@@ -1,21 +1,19 @@
 import { type Request, type Response } from "express";
 import { prisma } from "../config/db";
+import { catchAsync } from "../utils/catchAsync";
+import { AppError } from "../errors/AppError";
 
-const getWatchListItems = async (req: Request, res: Response) => {
-  try {
-    const watchListItems = await prisma.watchListItem.findMany({
-      where: {
-        userId: req.user?.id as string,
-      },
-    });
-    res.status(200).json({ watchListItems });
-  } catch (error) {
-    console.error("Error occurred while fetching watch list items:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+const getWatchListItems = catchAsync(async (req: Request, res: Response) => {
+  const watchListItems = await prisma.watchListItem.findMany({
+    where: {
+      userId: req.user?.id as string,
+    },
+  });
+  res.status(200).json({ watchListItems });
+});
 
-const addToWatchList = async (req: Request, res: Response) => {
+// add movie to watch list
+const addToWatchList = catchAsync(async (req: Request, res: Response) => {
   const { movieId, status, rating, notes } = req.body;
 
   //Verify movie exists in the database
@@ -26,7 +24,7 @@ const addToWatchList = async (req: Request, res: Response) => {
   });
 
   if (!movieExists) {
-    return res.status(404).json({ error: "Movie not found" });
+    throw new AppError("Movie not found", 404);
   }
 
   const existingWatchListItem = await prisma.watchListItem.findUnique({
@@ -39,7 +37,7 @@ const addToWatchList = async (req: Request, res: Response) => {
   });
 
   if (existingWatchListItem) {
-    return res.status(400).json({ error: "Movie already in watchList" });
+    throw new AppError("Movie already in watch list", 400);
   }
 
   const watchListItem = await prisma.watchListItem.create({
@@ -56,9 +54,10 @@ const addToWatchList = async (req: Request, res: Response) => {
     message: "Movie added to watchList successfully",
     watchListItem,
   });
-};
+});
 
-const updateWatchListItem = async (req: Request, res: Response) => {
+//Update Watch List Item
+const updateWatchListItem = catchAsync(async (req: Request, res: Response) => {
   const { status, rating, notes } = req.body;
 
   //Find watch list item and verify it belongs to the authenticated user
@@ -69,13 +68,11 @@ const updateWatchListItem = async (req: Request, res: Response) => {
   });
 
   if (!watchListItem) {
-    return res.status(404).json({ error: "Watch list item not found" });
+    throw new AppError("watch list item not found", 404);
   }
 
   if (watchListItem.userId !== req.user?.id) {
-    return res
-      .status(403)
-      .json({ error: "You are not authorized to update this item" });
+    throw new AppError("You are not authorized to update this item", 403);
   }
 
   const updatedWatchListItem = await prisma.watchListItem.update({
@@ -93,35 +90,40 @@ const updateWatchListItem = async (req: Request, res: Response) => {
     message: "Watch list item updated successfully",
     watchListItem: updatedWatchListItem,
   });
+});
+
+const removeMovieFromWatchList = catchAsync(
+  async (req: Request, res: Response) => {
+    //Find watch list item  an verify it belongs to the authenticated user
+    const watchListItem = await prisma.watchListItem.findUnique({
+      where: {
+        id: req.params.id as string,
+      },
+    });
+
+    if (!watchListItem) {
+      throw new AppError("Watch list item not found", 404);
+    }
+
+    if (watchListItem.userId !== req.user?.id) {
+      throw new AppError("You are not authorized to delete this item", 403);
+    }
+
+    await prisma.watchListItem.delete({
+      where: {
+        id: req.params.id as string,
+      },
+    });
+
+    res
+      .status(200)
+      .json({ message: "Movie removed from watchList successfully" });
+  },
+);
+
+export {
+  getWatchListItems,
+  addToWatchList,
+  updateWatchListItem,
+  removeMovieFromWatchList,
 };
-
-const removeMovieFromWatchList = async (req: Request, res: Response) => {
-  //Find watch list item  an verify it belongs to the authenticated user
-  const watchListItem = await prisma.watchListItem.findUnique({
-    where: {
-      id: req.params.id as string,
-    },
-  });
-
-  if (!watchListItem) {
-    return res.status(404).json({ error: "Watch list item not found" });
-  }
-
-  if (watchListItem.userId !== req.user?.id) {
-    return res
-      .status(403)
-      .json({ error: "You are not authorized to delete this item" });
-  }
-
-  await prisma.watchListItem.delete({
-    where: {
-      id: req.params.id as string,
-    },
-  });
-
-  res
-    .status(200)
-    .json({ message: "Movie removed from watchList successfully" });
-};
-
-export { getWatchListItems, addToWatchList,updateWatchListItem, removeMovieFromWatchList };

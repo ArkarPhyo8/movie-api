@@ -2,8 +2,10 @@ import { type Request, type Response } from "express";
 import { prisma } from "../config/db";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/generateToken";
+import { catchAsync } from "../utils/catchAsync";
+import { AppError } from "../errors/AppError";
 
-const register = async (req: Request, res: Response) => {
+const register = catchAsync(async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
   //Check if user already exists in the database
@@ -14,9 +16,7 @@ const register = async (req: Request, res: Response) => {
   });
 
   if (userExists) {
-    return res
-      .status(400)
-      .json({ error: "User already exists with this email" });
+    throw new AppError("User already exists with this email", 400);
   }
   // Hash Password
   const salt = await bcrypt.genSalt(10);
@@ -35,9 +35,9 @@ const register = async (req: Request, res: Response) => {
     message: "User registered successfully",
     user: { id: newUser.id, name: newUser.name, email: newUser.email },
   });
-};
+});
 
-const login = async (req: Request, res: Response) => {
+const login = catchAsync(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   //Check if user exists in the database
@@ -48,14 +48,14 @@ const login = async (req: Request, res: Response) => {
   });
 
   if (!user) {
-    return res.status(400).json({ error: "Invalid email or password" });
+    throw new AppError("Invalid email or password", 400);
   }
 
   // Compare passwords
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    return res.status(400).json({ error: "Invalid email or password" });
+    throw new AppError("Invalid email or password", 400);
   }
   //Generate JWT Token
   const token = generateToken(user.id, res);
@@ -65,7 +65,7 @@ const login = async (req: Request, res: Response) => {
     user: { id: user.id, name: user.name, email: user.email },
     token,
   });
-};
+});
 
 const logout = (req: Request, res: Response) => {
   res.clearCookie("jwt", {
